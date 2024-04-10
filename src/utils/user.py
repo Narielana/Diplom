@@ -20,6 +20,11 @@ async def get_user_by_email(email: str, conn: AsyncSession):
     return (await conn.exec(query)).fetchone()
 
 
+async def get_user_by_user_id(user_id: int, conn: AsyncSession):
+    query = select(user_models.UserBase).where(user_models.UserBase.id == user_id)
+    return (await conn.exec(query)).fetchone()
+
+
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
