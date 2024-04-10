@@ -3,13 +3,18 @@ import typing as tp
 
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import (
-    Column, DateTime, Integer, Text
+    Column, DateTime, Integer, Text, ForeignKey
 )
 from sqlalchemy_utils import EmailType, force_auto_coercion
 
 from src import db_base
 
 force_auto_coercion()
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: tp.Annotated[str, Field(min_length=8)]
 
 
 class UserCreate(BaseModel):
@@ -30,3 +35,11 @@ class UserBase(db_base.Base):
     surname = Column(Text, nullable=False)
     password = Column(Text, nullable=False)
     created_at = Column(DateTime(timezone=True), nullable=False, default=datetime.datetime.now(datetime.timezone.utc))
+
+
+class UsersSessions(db_base.Base):
+    __tablename__ = "users_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    session_id = Column(Text, nullable=False)

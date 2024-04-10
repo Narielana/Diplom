@@ -12,20 +12,20 @@ async def handle(user: user_models.UserCreate, conn: AsyncSession):
     if created_user:
         return JSONResponse(
             status_code=status.HTTP_409_CONFLICT,
-            content={'message': 'Incorrect or expired email code'},
+            content={"message": "User with this email already exists"},
         )
-    
+
     await conn.exec(
         insert(user_models.UserBase),
         [
             {
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'surname': user.surname,
-                'password': user_utils.get_password_hash(password=user.password),
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "surname": user.surname,
+                "password": user_utils.get_password_hash(password=user.password),
             }
-        ]
+        ],
     )
     await conn.commit()
 
