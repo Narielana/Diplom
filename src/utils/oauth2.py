@@ -3,14 +3,7 @@ import typing as tp
 from fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel
 
-
-def get_file_by_path(path: str):
-    try:
-        with open(path, 'r') as f:
-            key = f.read()
-        return key
-    except:
-        return '123'
+from src.utils import user
 
 
 class Settings(BaseModel):
@@ -19,7 +12,7 @@ class Settings(BaseModel):
     authjwt_token_location: set = {'cookies'}
     authjwt_refresh_cookie_key: str = 'refresh_token'
     authjwt_cookie_csrf_protect: bool = False
-    authjwt_secret_key: str = get_file_by_path('~/Diplom/keys/SECRET_KEY')
+    authjwt_secret_key: str = user.SECRET_KEY
 
 
 @AuthJWT.load_config
