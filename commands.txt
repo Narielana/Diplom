@@ -1,0 +1,5 @@
+Connect to db: psql 'postgresql://admin:postgres@localhost/auth'
+My github repository: https://github.com/Artm03/Diploma
+Run server: uvicorn src.main:app --reload
+Create migration: alembic revision --autogenerate -m "<name>"
+Apply migration: alembic upgrade head
