@@ -3,3 +3,4 @@ My github repository: https://github.com/Artm03/Diploma
 Run server: uvicorn src.main:app --reload
 Create migration: alembic revision --autogenerate -m "<name>"
 Apply migration: alembic upgrade head
+Main page: http://127.0.0.1:8000/docs

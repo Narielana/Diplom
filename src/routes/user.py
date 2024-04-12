@@ -1,6 +1,6 @@
 import typing as tp
 
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Depends, Request
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from src import db
@@ -21,16 +21,15 @@ async def registry_user(
     return await registry.handle(user=user, conn=conn)
 
 
-@router.post("/api//v1/user/login")
+@router.post("/api/v1/user/login")
 async def login_user(
     request: Request,
-    response: Response,
     user: user_models.UserLogin,
     conn: tp.Annotated[AsyncSession, Depends(db.get_db)],
     Authorize: tp.Annotated[AuthJWT, Depends()],
 ):
     return await login.handle(
-        request=request, user=user, conn=conn, response=response, Authorize=Authorize
+        request=request, user=user, conn=conn, Authorize=Authorize
     )
 
 

@@ -20,12 +20,28 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 async def get_user_by_email(email: str, conn: AsyncSession):
-    query = select(user_models.UserBase).where(user_models.UserBase.email == email)
+    query = select(
+        user_models.UserBase.id,
+        user_models.UserBase.email,
+        user_models.UserBase.password,
+        user_models.UserBase.first_name,
+        user_models.UserBase.last_name,
+        user_models.UserBase.surname,
+        user_models.UserBase.created_at
+    ).where(user_models.UserBase.email == email)
     return (await conn.exec(query)).fetchone()
 
 
 async def get_user_by_user_id(user_id: int, conn: AsyncSession):
-    query = select(user_models.UserBase).where(user_models.UserBase.id == user_id)
+    query = select(
+        user_models.UserBase.id,
+        user_models.UserBase.email,
+        user_models.UserBase.password,
+        user_models.UserBase.first_name,
+        user_models.UserBase.last_name,
+        user_models.UserBase.surname,
+        user_models.UserBase.created_at
+    ).where(user_models.UserBase.id == user_id)
     return (await conn.exec(query)).fetchone()
 
 
@@ -90,7 +106,7 @@ async def get_current_user(
         raise credentials_exception
 
     user: tp.Optional[user_models.UserBase] = await get_user_by_user_id(
-        conn=conn, id=user_id
+        conn=conn, user_id=user_id
     )
     if user is None:
         raise credentials_exception

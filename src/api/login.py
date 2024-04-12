@@ -1,6 +1,6 @@
 import datetime
 
-from fastapi import status, Response, Request
+from fastapi import status, Request
 from fastapi.responses import JSONResponse
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy import insert
@@ -14,7 +14,6 @@ async def handle(
     request: Request,
     user: user_models.UserLogin,
     conn: AsyncSession,
-    response: Response,
     Authorize: AuthJWT,
 ):
     user: user_models.UserBase = await user_utils.authenticate_user(
@@ -28,7 +27,7 @@ async def handle(
 
     fingerprint = request.headers.get("X-Fingerprint-ID")
     if not fingerprint:
-        raise JSONResponse(
+        return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
             content={"message": "Incorrect session"},
         )
@@ -62,6 +61,14 @@ async def handle(
         ),
     )
 
+    response = JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "token": access_token,
+            "token_type": "bearer",
+        },
+    )
+
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
@@ -71,10 +78,4 @@ async def handle(
         httponly=True,
     )
 
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content={
-            "token": access_token,
-            "token_type": "bearer",
-        },
-    )
+    return response
