@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from src import db
-from src.api import registry, login, me, refresh
+from src.api import registry, login, me, refresh, logout
 from src.models import user as user_models
 from src.utils import user as user_utils
 from src.utils.oauth2 import AuthJWT
@@ -49,3 +49,12 @@ async def refresh_token(
     Authorize: tp.Annotated[AuthJWT, Depends()],
 ):
     return await refresh.handle(conn=conn, request=request, Authorize=Authorize)
+
+
+@router.get("/api/v1/user/logout")
+async def logout_user(
+    user: tp.Annotated[user_models.UserBase, Depends(user_utils.get_current_user)],
+    conn: tp.Annotated[AsyncSession, Depends(db.get_db)],
+    Authorize: tp.Annotated[AuthJWT, Depends()],
+):
+    return await logout.handle(conn=conn, user=user, Authorize=Authorize)
