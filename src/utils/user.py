@@ -94,7 +94,7 @@ async def get_current_user(
                 raise credentials_exception
         else:
             raise credentials_exception
-    except JWTError:
+    except JWTError as err:
         raise credentials_exception
 
     fingerprint = request.headers.get("X-Fingerprint-ID")

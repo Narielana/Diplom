@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 
 from src.routes import ping as ping_routes
 from src.routes import user as user_routes
+from src.routes import roles as roles_routes
 
 
 app = FastAPI()
@@ -18,3 +19,4 @@ async def handler(request: Request, exc: HTTPException):
 
 app.include_router(ping_routes.router)
 app.include_router(user_routes.router)
+app.include_router(roles_routes.router)
