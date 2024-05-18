@@ -19,7 +19,7 @@ REFRESH_TOKEN_EXPIRE_MINUTES = 10080
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-async def get_user_by_email(email: str, conn: AsyncSession):
+async def get_user_by_email(email: str, conn: AsyncSession) -> tp.Optional[user_models.UserBase]:
     query = select(
         user_models.UserBase.id,
         user_models.UserBase.email,
