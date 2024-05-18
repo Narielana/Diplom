@@ -32,7 +32,7 @@ async def get_user_by_email(email: str, conn: AsyncSession):
     return (await conn.exec(query)).fetchone()
 
 
-async def get_user_by_user_id(user_id: int, conn: AsyncSession):
+async def get_user_by_user_id(user_id: int, conn: AsyncSession) -> tp.Optional[user_models.UserBase]:
     query = select(
         user_models.UserBase.id,
         user_models.UserBase.email,

@@ -25,6 +25,14 @@ class UserCreate(BaseModel):
     password: tp.Annotated[str, Field(min_length=8)]
 
 
+class UserInfo(BaseModel):
+    user_id: EmailStr
+    first_name: str
+    last_name: str
+    surname: str
+    roles: tp.List[str]
+
+
 class UserBase(db_base.Base):
     __tablename__ = "users"
 
